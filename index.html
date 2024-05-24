@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <!-- 樣式語法、title -->
+  <!-- 以下是為了讓中文不要亂碼 -->
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>個人作業3-互動網頁拖曳測驗</title>
+  <!-- css樣式 -->
+  <style>
+    /* 定義單字區域的樣式。 #為id選擇器，只能唯一。.為類別選擇器可以套用很多 */
+    .word {
+      width: 100px;
+      height: 50px;
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #aaaaaa;
+      /* 使單字區域水平排列 */
+      display: inline-block;
+    }
+    /* 定義圖片樣式 */
+    img {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      border: 1px solid #aaaaaa;
+    }
+    /* 定義分數顯示區域樣式 */
+    #score {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    // let宣告區域變數score，可以限定在目前的小遊戲。"="是指派，"=="才是等於
+    // var為全域變數，每個檔案都可以提取，怕干擾第二個遊戲
+    let score = 0; // 初始化分數為0
+    let wordsCompleted = 0; // 初始化已完成的單字區域數量
+
+    // 允許拖放的元素
+    // ev可以放任何東西
+    function allowDrop(ev) {
+      ev.preventDefault(); //阻止預設行為，以允許拖放
+    }
+
+    // 設定(set)被拖曳元素的資料(data)
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id); //將被拖曳元素的id"存入"拖曳資料"text"
+    }
+
+    // 處理放置事件
+    function drop(ev, word) {
+      ev.preventDefault(); //阻止預設行為
+      const data = ev.dataTransfer.getData("text"); //獲取被拖曳元素的id
+      const img = document.getElementById(data); //獲取被拖曳的元素(img),data存入為img
+      if (data === word) {  //如果拖曳元素id與目標單字匹配
+        if (ev.target.children.length === 0) { // 如果目標區域沒有圖片
+          ev.target.appendChild(img); //將圖片(img)添加到目標區域
+          score++; //分數加1
+          wordsCompleted++; // 已完成的單字區域數量加1
+        }
+      } else { 
+        score--; //分數減1
+      }
+
+      document.getElementById("score").innerText = "Score: " + score; //更新分數顯示
+
+      // 檢查是否所有單字區域都有圖片
+      if (wordsCompleted === 9) { // 總共9個單字區域
+        alert("恭喜過關！\n最終總分：" + score);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>拖曳遊戲-貓咪配對大作戰</h1>
+  <p>將正確的貓咪拖曳到正確的品種名稱上吧！</p>
+
+  <!-- 第一關 -->
+  <div id="level1">
+    <h2>第一關</h2>
+    <!-- 定義單字區域，允許拖放 -->
+    <div id="word1" class="word" ondrop="drop(event, '英國短毛貓')" ondragover="allowDrop(event)">英國短毛貓</div>
+    <div id="word2" class="word" ondrop="drop(event, '美國短毛貓')" ondragover="allowDrop(event)">美國短毛貓</div>
+    <div id="word3" class="word" ondrop="drop(event, '賓士貓')" ondragover="allowDrop(event)">賓士貓</div>
+    <br>
+    <!-- 定義可拖曳的圖片，設置drag(拖曳)事件，true打開可被拖曳(draggable)的功能，drop(放下) -->
+    <!-- 拖曳開始(on drag start)時執行function -->  
+    <img id="美國短毛貓" src="美國短毛貓.png" draggable="true" ondragstart="drag(event)">
+    <img id="英國短毛貓" src="英國短毛貓.jpg" draggable="true" ondragstart="drag(event)">
+    <img id="賓士貓" src="賓士貓.jpg" draggable="true" ondragstart="drag(event)">
+  </div>
+
+  <!-- 第二關 -->
+  <div id="level2">
+    <h2>第二關</h2>
+    <div id="word4" class="word" ondrop="drop(event, '暹羅貓')" ondragover="allowDrop(event)">暹羅貓</div>
+    <div id="word5" class="word" ondrop="drop(event, '曼赤肯')" ondragover="allowDrop(event)">曼赤肯</div>
+    <div id="word6" class="word" ondrop="drop(event, '三花貓')" ondragover="allowDrop(event)">三花貓</div>
+    <br>
+    <img id="三花貓" src="三花貓.jpg" draggable="true" ondragstart="drag(event)">
+    <img id="曼赤肯" src="曼赤肯.jpg" draggable="true" ondragstart="drag(event)">
+    <img id="暹羅貓" src="暹羅貓.jpg" draggable="true" ondragstart="drag(event)">
+  </div>
+
+  <!-- 第三關 -->
+  <div id="level3">
+    <h2>第三關</h2>
+    <div id="word7" class="word" ondrop="drop(event, '挪威森林貓')" ondragover="allowDrop(event)">挪威森林貓</div>
+    <div id="word8" class="word" ondrop="drop(event, '緬因貓')" ondragover="allowDrop(event)">緬因貓</div>
+    <div id="word9" class="word" ondrop="drop(event, '布偶貓')" ondragover="allowDrop(event)">布偶貓</div>
+    <br>
+    <img id="布偶貓" src="布偶貓.jpg" draggable="true" ondragstart="drag(event)">
+    <img id="緬因貓" src="緬因貓.jpg" draggable="true" ondragstart="drag(event)">
+    <img id="挪威森林貓" src="挪威森林貓.jpg" draggable="true" ondragstart="drag(event)">
+  </div>
+
+  <!-- 顯示分數 -->
+  <p id="score">Score: 0</p>
+</body>
+</html>
